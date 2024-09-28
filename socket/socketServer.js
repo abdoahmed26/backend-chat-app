@@ -112,13 +112,21 @@ io.on("connection",async(socket) => {
         if(getConversation){
             const msgs = getConversation.message
             await Message.updateMany({_id:msgs.map(msg=>msg._id),sendBy:receivedId},{seen:true},{new:true})
-            // io.to(receivedId).emit("take-messages",getConversation.message)
+            const conversation = await Conversation.findOne({
+                "$or" : [
+                    { sender : user.id, receiver : receivedId },
+                    { sender : receivedId, receiver :  user.id}
+                ]
+            }).populate('message').sort({ updatedAt : -1 })
+            io.to(user.id).emit("take-messages",conversation.message)
+            io.to(receivedId).emit("take-messages",conversation.message)
         }
         
         const chats = await giveChats(user.id)
+        const receivedChats = await giveChats(receivedId) 
         // console.log(chats)
         io.to(user.id).emit("all-chats",chats)
-        io.to(receivedId).emit("all-chats",chats)
+        io.to(receivedId).emit("all-chats",receivedChats)
     })
 
     // Typing 

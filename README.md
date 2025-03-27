@@ -66,12 +66,13 @@ npm run dev
 - **Nodemailer**: Library for sending email
 - **Jsonwebtoken**: Library for sign and verify token 
 - **Socket io**: Library that enables real-time, bidirectional communication between clients.
+- **Passport**: Middleware for authentication
 
 
 ## Features
 
 - **User Management** 
-    - user can register new account or use  his google account
+    - user can register new account or use his google account or github account
     - user can login 
     - user can update his (personal infos, email, profile image, password)
     - user can reset his password in case of forgotten 

@@ -8,6 +8,9 @@ import {fileURLToPath} from "url"
 import { authRouter } from "./routes/authRoute.js"
 import { userRouter } from "./routes/userRoute.js"
 import { passwordRouter } from "./routes/passwordRoute.js"
+import { usePassportGithub, usePassportGoogle } from "./middelwars/passportOuth.js"
+import session from "express-session";
+import passport from "passport"
 
 dotenv.config()
 
@@ -24,13 +27,25 @@ app.use(cors({
         }
     },
     credentials : true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
 }))
+app.use(session({
+  secret: process.env.SESSION_SCRET_KEY,
+  resave: false,
+  saveUninitialized: false,
+}))
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(passport.authenticate("session"));
 
 const filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(filename)
 app.use("/uploads",express.static(path.join(__dirname,"uploads")))
 
 connectDB()
+usePassportGoogle()
+usePassportGithub()
 
 app.use("/api/v1/auth",authRouter)
 

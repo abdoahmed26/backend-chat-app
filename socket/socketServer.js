@@ -25,7 +25,8 @@ const io = new Server(server,{
             }
         },
         methods:["GET","POST","PUT","DELETE"],
-        credentials : true
+        credentials : true,
+        allowedHeaders: ["Content-Type", "Authorization"],
     }
 })
 

@@ -50,7 +50,8 @@ export const loginGoogle = async(req,res)=>{
             const token = jwt.sign({id:oldUser._id,email:oldUser.email},process.env.JWT_SRECT_KEY,{expiresIn:"1d"})
             res.cookie("token",token,{
                 expires:new Date(Date.now() + 24 * 60 * 60 * 1000),
-                sameSite:"None",
+                ameSite:"lax",
+                path:"/"
             })
         }
         else{
@@ -65,7 +66,8 @@ export const loginGoogle = async(req,res)=>{
             const token = jwt.sign({id:newUser._id,email:newUser.email},process.env.JWT_SRECT_KEY,{expiresIn:"1d"})
             res.cookie("token",token,{
                 expires:new Date(Date.now() + 24 * 60 * 60 * 1000),
-                sameSite:"None",
+                sameSite:"lax",
+                path:"/"
             })
         }
         return res.redirect(`${process.env.FRONT_END_URL}`)

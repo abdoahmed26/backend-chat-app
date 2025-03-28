@@ -13,17 +13,9 @@ export const app = express()
 
 export const server = http.createServer(app)
 
-const allowedOrigins = [process.env.FRONT_END_URL,"http://localhost:5173"]
-
 const io = new Server(server,{
     cors: {
-        origin:function (origin, callback) {
-            if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-              callback(null, true);  // السماح بالوصول
-            } else {
-              callback(new Error('Not allowed by CORS'));  // رفض الوصول
-            }
-        },
+        origin: process.env.FRONT_END_URL || "http://localhost:5173",
         methods:["GET","POST","PUT","DELETE"],
         credentials : true,
         allowedHeaders: ["Content-Type", "Authorization"],
